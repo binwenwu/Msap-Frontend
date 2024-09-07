@@ -9,6 +9,7 @@ import templateReducer from "./slices/templateSlice";
 import boxSlice from "./slices/boxSlice";
 import polynomialSlice from "./slices/polynomialSlice";
 import { middleware } from "./middleware";
+
 export function makeStore() {
   return configureStore({
     reducer: {

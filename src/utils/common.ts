@@ -138,6 +138,7 @@ export const toInitialUpperCase = (values: Record<string, any>) => {
   return newObj;
 };
 
+// 将对象转换为查询字符串
 export const objectToQueryString = (obj: Record<string, any>) => {
   if (!obj || Object.keys(obj).length === 0) {
     return "";

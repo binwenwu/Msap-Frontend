@@ -24,6 +24,7 @@ export default function Home() {
   const [tip, setTip] = useState("");
   const dispatch = useAppDispatch();
 
+  // 处理登录
   const handleSubmit = () => {
     setLoading(true);
     loginWithAuth(
@@ -46,7 +47,9 @@ export default function Home() {
         );
         setLoading(false);
         message.success("登录成功！");
-        onQueryRoleAndLink();
+        // 跳转到首页
+        router.push("./home");
+        // 埋点
         onBuryPoint();
       })
       .catch((err) => {
@@ -56,34 +59,7 @@ export default function Home() {
       });
   };
 
-  const onQueryRoleAndLink = () => {
-    queryRole()
-      .then((resp) => {
-        dispatch(
-          setUserInfo({
-            role: resp,
-          })
-        );
-        switch (resp) {
-          case 0:
-            router.push("./managerCenter");
-            break;
-          case 1:
-            router.push("./teacherCenter");
-            break;
-          case 2:
-            router.push("./studentCenter");
-            break;
-          default:
-            break;
-        }
-      })
-      .catch((err) => {
-        message.error("获取角色失败！");
-        console.error(err);
-      });
-  };
-
+  // 埋点
   const onBuryPoint = () => {
     buryPoint()
       .then((resp) => {
