@@ -1,27 +1,24 @@
-oge-web-edu
-
-
-### 项目启动
-开发环境
-```javascript
+### Project Start
+- development environment
+```bash
 npm run dev
 ```
 
-生产环境
+- production environment
 
+```bash
+npm run build # Package Build
+npm run start # run
 ```
-npm run build # 打包构建
-npm run start # 启动
-```
 
-默认在本地8080端口启动
+Start on local port 8080 by default
 
-### 代码提交规范
+### Code Submission Specifications
 
-代码提交之前先执行
+Execute code before committing
 
 ```
 npm run lint
 ```
 
-确保没有error之后再行提交，代码提交时会触发提交预检，没有通过则无法提交
+Make sure that there are no errors before committing. When committing the code, commit pre-check will be triggered. If it fails, it cannot be committed.
