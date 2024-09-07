@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Leaflet Swipe Map</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+      }
+      #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        z-index: 888;
+      }
+      #map2 {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        left: 50%;
+        z-index: 899;
+      }
+      .leaflet-container {
+        background: #fff;
+      }
+      #swipe {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        overflow: hidden;
+      }
+      #handle {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        width: 8px;
+        background: #333;
+        cursor: crosshair;
+        z-index: 999;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <div id="map"></div>
+      <div id="map2"></div>
+    </div>
+    <div id="swipe">
+      <div id="handle"></div>
+    </div>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+      // 创建底图和卷帘图层的地图实例
+      var map = L.map("map", {
+        center: [39.9042, 116.4074], // 北京市的经纬度
+        zoom: 10,
+      });
+      var map2 = L.map("map2", {
+        center: [30.5042, 114.4074], // 地图中心点坐标，这里以北京为例
+        zoom: 5, // 初始缩放级别
+        maxZoom: 18, // 最大缩放级别
+        minZoom: 0, // 最小缩放级别
+      });
+
+      // OSM瓦片服务URL
+      var osmUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+
+      // Mapbox卫星图层URL
+      var mapboxUrl =
+        "https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/256/{z}/{x}/{y}@2x?access_token=YOUR_MAPBOX_ACCESS_TOKEN";
+      const tiandituKey = "8c471ad83d563e443d9a630de25f23a0";
+      // 天地图影像图层URL
+      var tiandituImgUrl =
+        "http://t{s}.tianditu.gov.cn/img_w/wmts?" +
+        "tk=" +
+        tiandituKey +
+        "&SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=img" +
+        "&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILECOL={x}&TILEROW={y}";
+
+      // 天地图瓦片服务子域
+      var tiandituSubdomains = ["0", "1", "2", "3", "4", "5", "6", "7"];
+
+      // 添加OSM底图图层
+      var osmLayer = L.tileLayer(osmUrl, {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      }).addTo(map);
+
+      // 添加Mapbox卫星图层
+      var mapboxLayer = L.tileLayer(mapboxUrl, {
+        attribution:
+          '&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a>',
+      });
+
+      var tiandituImgLayer = L.tileLayer(tiandituImgUrl, {
+        subdomains: tiandituSubdomains,
+        attribution: '&copy; <a href="http://www.tianditu.gov.cn/">天地图</a>',
+      }).addTo(map2);
+
+      // 创建卷帘效果的地图实例
+      var swipeMap = L.map("swipe", {
+        center: [39.9042, 116.4074],
+        zoom: 10,
+        zoomControl: false,
+        attributionControl: false,
+        dragging: false,
+        scrollWheelZoom: false,
+        doubleClickZoom: false,
+        boxZoom: false,
+        keyboard: false,
+        inertia: false,
+        worldCopyJump: false,
+        tap: false,
+      });
+
+      // tiandituImgLayer.addTo(swipeMap);
+
+      // 将卷帘地图的视图与主地图同步
+      map.on("move", function () {
+        map2.setView(map.getCenter(), map.getZoom(), { animate: false });
+        map2.invalidateSize();
+      });
+
+      map.on("zoom", function () {
+        map2.setView(map.getCenter(), map.getZoom(), { animate: false });
+      });
+
+      // 自定义卷帘控制器
+      var handle = document.getElementById("handle");
+      var currentCenter = map.getCenter();
+      var currentZoom = map.getZoom();
+      handle.onmousedown = function (e) {
+        document.onmousemove = function (e) {
+          var x = e.clientX || e.pageX;
+          handle.style.left = x + "px";
+          document.getElementById("map").style.width = x + "px";
+
+          // map.invalidateSize();
+          map.setView(currentCenter, currentZoom);
+          map2.invalidateSize();
+          console.log(document.getElementById("map").style.width);
+          document.getElementById("map2").style.left = x + "px";
+          document.getElementById("map2").style.width = `calc(100% - ${x}px)`;
+        };
+
+        document.onmouseup = function () {
+          document.onmousemove = null;
+          document.onmouseup = null;
+        };
+
+        e.preventDefault();
+      };
+    </script>
+  </body>
+</html>

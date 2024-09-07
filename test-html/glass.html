@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>毛玻璃效果示例</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        /* background: url("background-image.jpg") no-repeat center center fixed; */
+        background-size: cover;
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(
+          135deg,
+          rgb(167, 206, 224) 50%,
+          rgb(208, 222, 167)
+        );
+      }
+
+      .frosted-glass {
+        width: 300px;
+        height: 200px;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 10px;
+
+        backdrop-filter: blur(30px) brightness(90%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: rgb(46, 143, 255);
+        font-size: 1.5rem;
+        text-align: center;
+        padding: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="frosted-glass">毛玻璃效果</div>
+  </body>
+</html>

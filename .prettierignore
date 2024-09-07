@@ -1,0 +1,11 @@
+.next
+node_modules
+package-lock.json
+.eslintrc.json
+.prettierrc.json
+commitlint.config.js
+next-env.d.ts
+README.md
+public
+pnpm-lock.yaml
+test-html

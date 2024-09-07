@@ -1,0 +1,88 @@
+@import "variables";
+.home {
+  width: 100%;
+  height: 100%;
+  color: rgba(56, 56, 56, 1);
+  background: url("#{$base-path}/img/home/index.webp") no-repeat;
+  background-size: cover;
+  background-position: center center;
+  font-family: Alibaba-Regular, sans-serif;
+  .titleBox {
+    padding-top: 100px;
+    padding-left: 200px;
+    display: flex;
+    .logo {
+      width: 76px;
+      height: 86px;
+      margin-right: 27px;
+    }
+    .title {
+      font-size: 60px;
+      font-family: Alibaba-Bold, sans-serif;
+    }
+  }
+  .loginBox {
+    position: absolute;
+    transform: translateY(-50%);
+    top: 50%;
+    left: 310px;
+    padding: 20px 30px;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 2px 2px 30px rgba(242, 247, 251, 1);
+    .title {
+      font-size: 36px;
+      text-align: center;
+      margin: 10px 0 40px 0;
+      font-family: Alibaba-Bold, sans-serif;
+    }
+    .form {
+      .inputWrap {
+        width: 400px;
+        height: 50px;
+        border-radius: 2px;
+        background: rgba(255, 255, 255, 1);
+        border: 1px solid rgba(128, 128, 128, 0.5);
+        display: flex;
+        align-items: center;
+        margin-bottom: 26px;
+      }
+      .meta {
+        display: flex;
+        justify-content: flex-end;
+        color: var(--primary-color);
+        cursor: pointer;
+      }
+      .tip {
+        color: #f10;
+        line-height: 16px;
+        height: 16px;
+      }
+    }
+    .loginBtn {
+      margin-top: 24px;
+      width: 400px;
+      height: 50px;
+      border-radius: 2px;
+      background: var(--primary-color);
+      border: 0px solid rgba(166, 166, 166, 1);
+      color: #fff;
+      font-size: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+    .message {
+      display: flex;
+      margin-top: 50px;
+      justify-content: center;
+      color: var(--font-gray-color);
+      font-size: 16px;
+    }
+  }
+}
+.highlight {
+  color: var(--primary-color);
+  cursor: pointer;
+}

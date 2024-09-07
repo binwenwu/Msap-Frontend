@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      document.addEventListener("visibilitychange", function () {
+        if (document.hidden) {
+          console.log("当前标签页不可见");
+          // 执行标签页不可见时的操作
+        } else {
+          console.log("当前标签页可见");
+          // 执行标签页可见时的操作
+        }
+      });
+    </script>
+  </body>
+</html>

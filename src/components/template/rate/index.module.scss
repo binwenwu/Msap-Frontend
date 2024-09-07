@@ -1,0 +1,52 @@
+.container {
+  width: 100%;
+  font-family: Alibaba-Regular, sans-serif;
+  .title {
+    color: var(--font-color);
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+  }
+  .tips {
+    padding-inline-start: 15px;
+    display: flex;
+    font-size: 12px;
+    color: rgba(166, 166, 166, 1);
+    justify-content: flex-start;
+    gap: 30px;
+    margin-top: 5px;
+  }
+  .message {
+    font-size: 14px;
+    color: #f10;
+  }
+  .lines {
+    width: 100%;
+    color: var(--font-gray-color);
+    height: 470px;
+    overflow-y: auto;
+    font-size: 16px;
+    .line {
+      margin: 10px 0;
+      border-radius: 4px;
+      height: 46px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 10px;
+      color: var(--font-color);
+      .text {
+        width: 100px;
+      }
+      .progress {
+        width: 200px;
+      }
+      .percentage {
+        background-color: rgba(242, 246, 250, 1);
+        border-radius: 4px;
+        padding: 5px 10px;
+        width: 120px;
+      }
+    }
+  }
+}

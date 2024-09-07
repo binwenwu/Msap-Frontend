@@ -1,0 +1,15 @@
+@import "variables";
+@font-face {
+  font-family: Alibaba-Bold;
+  src: url("#{$base-path}/fonts/AlibabaPuHuiTi-2-85-Bold.ttf");
+}
+
+@font-face {
+  font-family: Alibaba-Regular;
+  src: url("#{$base-path}/fonts/AlibabaPuHuiTi-2-55-Regular.ttf");
+}
+
+@font-face {
+  font-family: D-Din-Pro;
+  src: url("#{$base-path}/fonts/D-DIN-PRO-400-Regular.otf");
+}

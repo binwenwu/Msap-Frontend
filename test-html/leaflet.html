@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Leaflet with Tianditu</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+      #map {
+        height: 100vh;
+      }
+      .custom-zoom-controls {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: white;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        z-index: 999;
+      }
+      .custom-zoom-controls button {
+        display: block;
+        width: 30px;
+        height: 30px;
+        margin-bottom: 5px;
+        font-size: 16px;
+        line-height: 30px;
+        text-align: center;
+        background: #fff;
+        border: 1px solid #ccc;
+        cursor: pointer;
+      }
+      .custom-zoom-controls button:hover {
+        background: #f4f4f4;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <div class="custom-zoom-controls">
+      <button id="zoom-in">+</button>
+      <button id="zoom-out">-</button>
+    </div>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+      // 创建地图并设置初始视图
+      var map = L.map("map", {
+        zoomControl: false,
+      }).setView([39.9042, 116.4074], 5); // 北京市的经纬度
+      window.map = map;
+      // 天地图瓦片服务URL
+      var tiandituUrl =
+        "https://t{s}.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=YOUR_TDT_API_KEY";
+
+      // 天地图瓦片服务子域
+      var tiandituSubdomains = ["0", "1", "2", "3", "4", "5", "6", "7"];
+      var marker1 = L.marker([39.9042, 116.4074]).bindPopup("北京市");
+      var marker2 = L.marker([31.2304, 121.4737]).bindPopup("上海市");
+      var markerLayer = L.layerGroup([marker1, marker2]).addTo(map);
+
+      // 示例图层2：Polyline
+      var polyline = L.polyline(
+        [
+          [39.9042, 116.4074],
+          [31.2304, 121.4737],
+        ],
+        { color: "red" }
+      ).bindPopup("Beijing to Shanghai");
+      var polylineLayer = L.layerGroup([polyline]).addTo(map);
+      // 添加天地图底图图层
+      const layer = L.tileLayer(
+        "https://tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}",
+        {
+          name: "xxx",
+          foo: "bar",
+          attribution:
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        }
+      ).addTo(map);
+      window.layer = layer;
+      // 添加自定义缩放控件
+      document.getElementById("zoom-in").onclick = function () {
+        map.zoomIn();
+      };
+      document.getElementById("zoom-out").onclick = function () {
+        map.zoomOut();
+      };
+      // L.tileLayer(tiandituUrl, {
+      //   subdomains: tiandituSubdomains,
+      //   attribution: '&copy; <a href="http://www.tianditu.gov.cn/">天地图</a>',
+      // }).addTo(map);
+    </script>
+  </body>
+</html>

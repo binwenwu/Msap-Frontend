@@ -1,0 +1,16 @@
+.contaienr {
+  height: 600px;
+  padding: 20px 0;
+  display: flex;
+  .stepsBar {
+    width: 100px;
+  }
+  .stepsCom {
+    width: calc(100% - 100px);
+  }
+}
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}

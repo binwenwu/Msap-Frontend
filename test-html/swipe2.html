@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rounded Trapezoid</title>
+    <style>
+      .trapezoid {
+        width: 200px;
+        height: 100px;
+        background: #6c5ce7;
+        clip-path: polygon(0 0, 100% 0, 80% 100%, 20% 100%);
+        position: relative;
+      }
+
+      .trapezoid::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          to bottom right,
+          rgba(255, 255, 255, 0.5) 50%,
+          rgba(255, 255, 255, 0) 51%
+        );
+        border-radius: 10px; /* 这里仅影响梯形的上下边，模拟圆角效果 */
+        clip-path: inherit;
+        z-index: -1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="trapezoid"></div>
+  </body>
+</html>

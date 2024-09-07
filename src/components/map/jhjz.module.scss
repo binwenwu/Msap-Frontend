@@ -1,0 +1,61 @@
+/* YourComponent.module.scss */
+.mapRoot {
+  width: 100%;
+  height: 100%;
+}
+.polynomial {
+  width: 80%;
+  height: 100%;
+  .header {
+    width: 100%;
+    height: 65%;
+    background-color: rgb(204, 204, 204);
+    .map {
+      height: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .leftMap {
+        width: 60%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .standardP {
+          margin-left: 20px;
+        }
+        .leftMapContainer {
+          width: 95%;
+          margin: 0px 10px 10px 10px;
+          height: 100%;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3),
+            0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+      }
+      .rightMap {
+        width: 60%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .rectifyP {
+          margin-left: 20px;
+        }
+        .rightMapContainer {
+          margin: 0px 10px 10px 10px;
+          width: 95%;
+          height: 100%;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3),
+            0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+      }
+    }
+  }
+  .centre {
+    width: 100%;
+    height: 40px;
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    align-items: center; // 垂直居中
+  }
+}
