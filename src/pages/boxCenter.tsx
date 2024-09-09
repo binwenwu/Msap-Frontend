@@ -90,7 +90,7 @@ export default function BoxCenter() {
             </svg>
             工具箱模式
           </div>
-          <Link href="./studentCenter" className={styles.returnBtn}>
+          <Link href="./home" className={styles.returnBtn}>
             <svg
               style={{ height: 46 }}
               className="icon"
