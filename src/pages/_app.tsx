@@ -11,6 +11,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { eventEmitter } from "@/utils/events";
 import { debounce } from "lodash";
+import { clearScreenDown } from "readline";
 
 export default function App({ Component, pageProps }: AppProps) {
   // 获取路由对象
@@ -25,14 +26,12 @@ export default function App({ Component, pageProps }: AppProps) {
       const widthScale = window.innerWidth / 1920;
       // 设置缩放比例
       const zoom = widthScale < 0.7 ? 0.7 : widthScale;
-      // 使用 CSS transform 进行缩放
-      document.body.style.transform = `scale(${zoom})`;
-      document.body.style.transformOrigin = "top left"; // 设置缩放基准点
+      // 缩放
+      document.body.style.zoom = String(zoom);
       console.log("current screen zoom: ", zoom);
     }, 200); // 防抖，200ms 内只执行一次
 
     onResize(); // 初始化执行一次
-
     window.addEventListener("resize", onResize);
 
     return () => {

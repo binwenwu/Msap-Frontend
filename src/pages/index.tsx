@@ -75,7 +75,7 @@ export default function Home() {
       <div className={styles.home}>
         <div className={styles.titleBox}>
           <img
-            src={`${BASE_PATH}/img/home/logo.webp`}
+            src={`${BASE_PATH}/img/home/logo.svg`}
             alt="logo"
             className={styles.logo}
           />
