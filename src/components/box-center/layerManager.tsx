@@ -29,10 +29,14 @@ import { getTaskDetail } from "@/request/student";
 import { queryResultDetail } from "@/request/course";
 import styles from "./layerManager.module.scss";
 
+
+
+// LayerManagerProps 接口定义了 LayerManager 组件所需的属性类型。
 interface LayerManagerProps {
   onLayerChange: (layer: Record<string, any>) => void;
 }
 
+// LayerManager 组件使用该接口来确保传入的属性符合预期，并通过解构赋值获取 onLayerChange 属性。
 const LayerManager: React.FC<LayerManagerProps> = ({ onLayerChange }) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
