@@ -22,37 +22,17 @@ const nextConfig = {
         BASE_PATH: "/education",
     },
     basePath: "/education",
+    // 将请求路径映射到不同的目标路径
     async rewrites() {
-        // wanda
-        const BASE_URL = "http://openge.org.cn/gateway/";
-        // const BASE_URL = "http://10.101.240.20/gateway/";
-        // zhengzhong
-        // const BASE_URL = "http://192.168.1.108:18080";
-
-        return [{
-                source: "/hub/:slug*",
-                destination: `http://113.45.149.146:8000/hub/:slug*`,
-            },
-            {
-                source: "/edit/:slug*",
-                destination: `http://113.45.149.146:443/:slug*`,
-            },
+        return [
             {
                 source: "/api/pywps/:slug*",
-                destination: `http://openge.org.cn/pywps/:slug*`,
+                destination: `http://111.37.195.68/pywps/:slug*`,
             },
             {
                 source: "/api/:slug*",
-                destination: `${BASE_URL}/:slug*`,
+                destination: `http://111.37.195.68/gateway/:slug*`,
             },
-            {
-                source: "/jupyter/:slug*",
-                destination: `https://113.45.149.146:8000/:slug*`,
-            },
-            // {
-            //   source: "/api/oge-dag-22/:slug*",
-            //   destination: `http://120.48.147.38:8085/oge-dag-22/:slug*`,
-            // },
         ];
     },
     transpilePackages: ["leaflet-side-by-side"],

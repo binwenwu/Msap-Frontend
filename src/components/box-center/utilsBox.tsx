@@ -208,7 +208,7 @@ const UtilsBox: React.FC<UtilsBoxProps> = () => {
   }, []);
   // 控制多项式页面的布尔值
   const dispatch = useDispatch();
-  // X好关闭
+  // X号关闭
   const handleClose = useCallback(() => {
     // 点击X号关闭页面
     dispatch(setPolynomial(false));

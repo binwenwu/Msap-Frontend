@@ -10,8 +10,8 @@ import getConfig from "next/config";
 
 const { publicRuntimeConfig } = getConfig();
 
-export const BASE_URL = publicRuntimeConfig?.BASE_URL || "http://www.openge.org.cn/api";
+export const BASE_URL = publicRuntimeConfig?.BASE_URL || "";
 
 export const BASE_PATH = publicRuntimeConfig?.BASE_PATH || "";
 
-export const OUTPUT_PATH = "/mnt/storage/on-the-fly";
+export const OUTPUT_PATH = "/home/storage/msap/on-the-fly";

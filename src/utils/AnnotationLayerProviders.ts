@@ -1,7 +1,6 @@
 import * as Cesium from "cesium";
-// require('cesium/Build/Cesium/Widgets/widgets.css');
 
-// 天地图影像中文标记服务(墨卡托投影)
+// 天地图影像中文注记服务(墨卡托投影)
 // Usage: 用于卫星影像图层，与tainDTVectorAnno相比多了行政矢量边界
 export const tianDTAnno = new Cesium.WebMapTileServiceImageryProvider({
   url:
@@ -16,7 +15,7 @@ export const tianDTAnno = new Cesium.WebMapTileServiceImageryProvider({
   minimumLevel: 0, // 最小层级
   maximumLevel: 18,
 });
-// 天地图矢量中文标记服务
+// 天地图矢量中文注记服务
 // Usage:用于矢量地图图层，与tianDTAnno的区别是，只有地名注记，没有行政矢量边界
 export const tainDTVectorAnno = new Cesium.WebMapTileServiceImageryProvider({
   url:
@@ -31,7 +30,7 @@ export const tainDTVectorAnno = new Cesium.WebMapTileServiceImageryProvider({
   minimumLevel: 0, // 最小层级
   maximumLevel: 18,
 });
-
+// 天地图影像英文注记服务(墨卡托投影)
 export const tianDTAnno_EN = new Cesium.WebMapTileServiceImageryProvider({
   url:
     "http://{s}.tianditu.gov.cn/eia_w/wmts?service=wmts&request=GetTile&version=1.0.0" +
