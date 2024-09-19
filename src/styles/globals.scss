@@ -1,257 +1,238 @@
 :root {
-  background-color: #f8f8f8;
-  height: 100%;
-  --primary-color: rgb(46, 143, 255);
-  --font-gray-color: rgb(100, 111, 127);
-  --font-color: rgb(56, 56, 56);
-  --bg-color: rgb(230, 244, 255);
+    background-color: #f8f8f8;
+    height: 100%;
+    --primary-color: rgb(46, 143, 255);
+    --font-gray-color: rgb(100, 111, 127);
+    --font-color: rgb(56, 56, 56);
+    --bg-color: rgb(230, 244, 255);
 }
 
 html,
 body {
-  margin: 0;
-  height: 100%;
+    margin: 0;
+    height: 100%;
 }
 
 // 将隐藏所有Cesium原生的窗口部件
 .cesium-viewer
-  > *:not(.cesium-viewer-cesiumWidgetContainer, .cesium-viewer-toolbar) {
-  display: none;
+    > *:not(.cesium-viewer-cesiumWidgetContainer, .cesium-viewer-toolbar) {
+    display: none;
 }
 
 canvas {
-  position: absolute;
-  width: 100%;
-  height: 100%;
+    position: absolute;
+    width: 100%;
+    height: 100%;
 }
 #__next {
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 }
 %langItemIcon {
-  background-repeat: no-repeat;
-  background-size: 15px 15px;
-  background-position: 0 4px;
-  padding-left: 20px;
+    background-repeat: no-repeat;
+    background-size: 15px 15px;
+    background-position: 0 4px;
+    padding-left: 20px;
 }
 
-// 代码编辑器语言选择样式
-// .oge-editor-lang-javascript {
-//   @extend %langItemIcon;
-
-//   background-image: url(../components/code-editor/assets/js.svg);
-// }
-
-// .oge-editor-lang-python {
-//   @extend %langItemIcon;
-
-//   background-image: url(../components/code-editor/assets/python.svg);
-// }
-
-// .oge-editor-lang-typescript {
-//   @extend %langItemIcon;
-
-//   background-image: url(../components/code-editor/assets/ts.svg);
-// }
-
 h2 {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+    width: 6px;
+    height: 6px;
 }
 
 /*定义滚动条轨道 内阴影+圆角*/
 ::-webkit-scrollbar-track {
-  border-radius: 10px;
-  background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 /*定义滑块 内阴影+圆角*/
 ::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.15);
-  background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.15);
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 body {
-  .ant-message {
-    z-index: 1400 !important;
-  }
+    .ant-message {
+        z-index: 1400 !important;
+    }
 }
 
 .hljs {
-  .hljs-keyword {
-    color: plum;
-  }
-  .hljs-string {
-    color: orange;
-  }
-  .hljs-number {
-    color: rgb(13, 232, 127);
-  }
+    .hljs-keyword {
+        color: plum;
+    }
+    .hljs-string {
+        color: orange;
+    }
+    .hljs-number {
+        color: rgb(13, 232, 127);
+    }
 }
 
 .ant-tabs-large > .ant-tabs-nav .ant-tabs-tab {
-  font-size: 24px;
+    font-size: 24px;
 }
 
 .ant-tabs-top > .ant-tabs-nav::before {
-  border-bottom: none;
+    border-bottom: none;
 }
 
 .ant-tabs-tab {
-  font-family: Alibaba-Regular, sans-serif;
+    font-family: Alibaba-Regular, sans-serif;
 }
 
 // Drawer header标签
 .ant-drawer-title {
-  font-family: Alibaba-Bold;
-  font-size: 18px !important;
+    font-family: Alibaba-Bold;
+    font-size: 18px !important;
 }
 // Form表单的label
 .ant-form-item-label > label {
-  font-family: Alibaba-Regular, sans-serif;
+    font-family: Alibaba-Regular, sans-serif;
 }
 // Menu菜单文字
 li.ant-menu-item {
-  font-family: Alibaba-Regular, sans-serif;
-  padding-left: 44px !important;
-  font-size: 18px;
-  color: var(--font-gray-color) !important;
+    font-family: Alibaba-Regular, sans-serif;
+    padding-left: 44px !important;
+    font-size: 18px;
+    color: var(--font-gray-color) !important;
 }
 // 选择框字体
 span.ant-select-selection-placeholder {
-  font-family: Alibaba-Regular, sans-serif;
+    font-family: Alibaba-Regular, sans-serif;
 }
 // input框字体
 input[placeholder] {
-  font-family: Alibaba-Regular, sans-serif;
+    font-family: Alibaba-Regular, sans-serif;
 }
 // antd 所有 button按钮
 .ant-btn > span {
-  font-family: Alibaba-Regular, sans-serif;
+    font-family: Alibaba-Regular, sans-serif;
 }
 // antd table columns标题
 th.ant-table-cell {
-  font-family: Alibaba-Bold, sans-serif;
-  color: var(--font-color);
-  font-size: 16px;
-  background-color: var(--bg-color) !important;
-  padding: 12px 16px !important;
+    font-family: Alibaba-Bold, sans-serif;
+    color: var(--font-color);
+    font-size: 16px;
+    background-color: var(--bg-color) !important;
+    padding: 12px 16px !important;
 }
 // antd table datasource
 td.ant-table-cell {
-  font-family: Alibaba-Regular, sans-serif;
-  font-size: 14px;
-  color: var(--font-gray-color);
-  padding: 8px 16px !important;
+    font-family: Alibaba-Regular, sans-serif;
+    font-size: 14px;
+    color: var(--font-gray-color);
+    padding: 8px 16px !important;
 }
 tr.ant-table-row:nth-of-type(odd) > td.ant-table-cell {
-  background-color: rgb(248, 251, 255) !important;
+    background-color: rgb(248, 251, 255) !important;
 }
 tr.ant-table-row:nth-of-type(even) > td.ant-table-cell {
-  background-color: rgb(255, 255, 255) !important;
+    background-color: rgb(255, 255, 255) !important;
 }
 
 .ant-pagination,
 .ant-pagination-item,
 .ant-select-selection-item {
-  font-family: Alibaba-Regular, sans-serif;
+    font-family: Alibaba-Regular, sans-serif;
 }
 
 .MuiTreeItem-label {
-  font-family: Alibaba-Regular, sans-serif !important;
+    font-family: Alibaba-Regular, sans-serif !important;
 }
 
 span.ant-tree-title {
-  font-family: Alibaba-Regular, sans-serif;
+    font-family: Alibaba-Regular, sans-serif;
 }
 
 span.ant-tree-node-selected {
-  background-color: #edf4fb !important;
-  color: #1677ff !important;
+    background-color: #edf4fb !important;
+    color: #1677ff !important;
 }
 // 算子执行进度条
 .ant-drawer-right .ant-progress-outer {
-  padding-inline-end: 0 !important;
+    padding-inline-end: 0 !important;
 }
 
 .ant-drawer-right .ant-progress-inner {
-  background-color: transparent;
-  z-index: 999;
+    background-color: transparent;
+    z-index: 999;
 }
 .ant-form-inline .ant-form-item {
-  margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 .ant-form-item .ant-form-item-label > label {
-  white-space: pre-line;
-  min-height: 32px;
-  height: fit-content;
+    white-space: pre-line;
+    min-height: 32px;
+    height: fit-content;
 }
 
 .ant-form-item-label > label {
-  white-space: pre-line;
-  min-height: 32px;
-  height: fit-content;
+    white-space: pre-line;
+    min-height: 32px;
+    height: fit-content;
 }
 
 .ant-modal-title {
-  font-family: Alibaba-Bold, sans-serif;
+    font-family: Alibaba-Bold, sans-serif;
 }
 
 .ant-col-4.ant-col-offset-1 .ant-upload-list.ant-upload-list-text {
-  margin-left: -260px;
+    margin-left: -260px;
 }
 
 .ant-spin-container {
-  width: inherit;
-  height: inherit;
+    width: inherit;
+    height: inherit;
 }
 
 .ant-drawer-body {
-  overflow: scroll;
+    overflow: scroll;
 }
 
 ::-webkit-scrollbar {
-  width: 5px; /* 滚动条宽度 */
+    width: 5px; /* 滚动条宽度 */
 }
 
 ::-webkit-scrollbar-track {
-  background: #fff;
+    background: #fff;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #eee;
+    background: #eee;
 }
 
 .ant-input-affix-wrapper .ant-input-prefix {
-  margin-inline-end: 8px;
+    margin-inline-end: 8px;
 }
 
 .ant-menu-inline .ant-menu-item {
-  height: 60px;
-  line-height: 60px;
+    height: 60px;
+    line-height: 60px;
 }
 
 .ant-input-affix-wrapper:not(.ant-transfer-list-search) {
-  border-start-start-radius: 20px !important;
-  border-end-start-radius: 20px !important;
+    border-start-start-radius: 20px !important;
+    border-end-start-radius: 20px !important;
 }
 .ant-input-search-button {
-  border-start-end-radius: 20px !important;
-  border-end-end-radius: 20px !important;
+    border-start-end-radius: 20px !important;
+    border-end-end-radius: 20px !important;
 }
 .ant-input-affix-wrapper.ant-input-password {
-  border-start-start-radius: 6px !important;
-  border-end-start-radius: 6px !important;
+    border-start-start-radius: 6px !important;
+    border-end-start-radius: 6px !important;
 }
 
 .ant-empty-description {
-  color: var(--font-gray-color) !important;
-  font-family: Alibaba-Regular, sans-serif;
+    color: var(--font-gray-color) !important;
+    font-family: Alibaba-Regular, sans-serif;
 }

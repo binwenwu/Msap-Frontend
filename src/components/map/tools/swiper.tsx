@@ -3,18 +3,18 @@ import { useEffect, useState } from "react";
 import styles from "../Map.module.scss";
 
 export default () => {
-  const [saveForm] = Form.useForm();
+    const [saveForm] = Form.useForm();
 
-  const [openSwipeControl, setopenSwipeControl] = useState(false);
+    const [openSwipeControl, setopenSwipeControl] = useState(false);
 
-  const [openPopupSwipeControl, setopenPopupSwipeControl] = useState(false);
+    const [openPopupSwipeControl, setopenPopupSwipeControl] = useState(false);
 
-  useEffect(() => {
-    const toolbar = document.getElementById("toolbar");
-    const tool = document.createElement("div");
-    tool.title = "卷帘";
-    tool.style.cssText = `width:30px;height:30px;background-color:#fff;display:flex;justify-content:center;align-items:center;z-index:999;border-bottom:1px solid #ccc;`;
-    tool.innerHTML = `<svg
+    useEffect(() => {
+        const toolbar = document.getElementById("toolbar");
+        const tool = document.createElement("div");
+        tool.title = "卷帘";
+        tool.style.cssText = `width:30px;height:30px;background-color:#fff;display:flex;justify-content:center;align-items:center;z-index:999;border-bottom:1px solid #ccc;`;
+        tool.innerHTML = `<svg
       style="
         width: 50%;
         height: 50%;
@@ -30,84 +30,84 @@ export default () => {
         fill="#515151"
       />
     </svg>`;
-    toolbar?.appendChild(tool);
-    tool.onclick = () => {
-      onClickButton();
+        toolbar?.appendChild(tool);
+        tool.onclick = () => {
+            onClickButton();
+        };
+    }, []);
+
+    const onClickButton = () => {
+        if (openSwipeControl) {
+            setopenSwipeControl((prevState) => !prevState);
+        }
+        // setopenSwipeControl(prevState => !prevState)
+        if (!openSwipeControl) {
+            setopenPopupSwipeControl((prevState) => !prevState);
+        }
     };
-  }, []);
+    const handleSubmit = () => {
+        setopenPopupSwipeControl(false);
+        // 控制卷帘效果
+        setopenSwipeControl((prevState) => !prevState);
+    };
 
-  const onClickButton = () => {
-    if (openSwipeControl) {
-      setopenSwipeControl((prevState) => !prevState);
-    }
-    // setopenSwipeControl(prevState => !prevState)
-    if (!openSwipeControl) {
-      setopenPopupSwipeControl((prevState) => !prevState);
-    }
-  };
-  const handleSubmit = () => {
-    setopenPopupSwipeControl(false);
-    // 控制卷帘效果
-    setopenSwipeControl((prevState) => !prevState);
-  };
+    const handleLayerChange = (value: any) => {
+        console.log(value);
+    };
 
-  const handleLayerChange = (value: any) => {
-    console.log(value);
-  };
-
-  return (
-    <>
-      <Modal
-        title="选择图层"
-        width={300}
-        open={openPopupSwipeControl}
-        footer={null}
-        destroyOnClose
-        onCancel={() => {
-          setopenPopupSwipeControl(false);
-          setopenSwipeControl(false);
-        }}
-      >
-        <Form
-          form={saveForm}
-          preserve={false}
-          labelCol={{ span: 8 }}
-          onFinish={handleSubmit}
-        >
-          <Form.Item
-            label="左卷帘"
-            name="leftLayer"
-            //  必须填写
-            rules={[{ required: true }]}
-          >
-            <Select options={[]} onChange={handleLayerChange} />
-          </Form.Item>
-          <Form.Item
-            label="右卷帘"
-            name="rightLayer"
-            rules={[{ required: true }]}
-          >
-            <Select options={[]} onChange={handleLayerChange} />
-          </Form.Item>
-          <div className={styles.btns}>
-            <Button
-              onClick={() => {
-                setopenPopupSwipeControl(false);
-                setopenSwipeControl(false);
-              }}
+    return (
+        <>
+            <Modal
+                title="选择图层"
+                width={300}
+                open={openPopupSwipeControl}
+                footer={null}
+                destroyOnClose
+                onCancel={() => {
+                    setopenPopupSwipeControl(false);
+                    setopenSwipeControl(false);
+                }}
             >
-              取消
-            </Button>
-            <Button
-              style={{ marginLeft: "10px" }}
-              type="primary"
-              htmlType="submit"
-            >
-              确认
-            </Button>
-          </div>
-        </Form>
-      </Modal>
-    </>
-  );
+                <Form
+                    form={saveForm}
+                    preserve={false}
+                    labelCol={{ span: 8 }}
+                    onFinish={handleSubmit}
+                >
+                    <Form.Item
+                        label="左卷帘"
+                        name="leftLayer"
+                        //  必须填写
+                        rules={[{ required: true }]}
+                    >
+                        <Select options={[]} onChange={handleLayerChange} />
+                    </Form.Item>
+                    <Form.Item
+                        label="右卷帘"
+                        name="rightLayer"
+                        rules={[{ required: true }]}
+                    >
+                        <Select options={[]} onChange={handleLayerChange} />
+                    </Form.Item>
+                    <div className={styles.btns}>
+                        <Button
+                            onClick={() => {
+                                setopenPopupSwipeControl(false);
+                                setopenSwipeControl(false);
+                            }}
+                        >
+                            取消
+                        </Button>
+                        <Button
+                            style={{ marginLeft: "10px" }}
+                            type="primary"
+                            htmlType="submit"
+                        >
+                            确认
+                        </Button>
+                    </div>
+                </Form>
+            </Modal>
+        </>
+    );
 };

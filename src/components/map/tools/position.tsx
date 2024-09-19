@@ -4,20 +4,20 @@ import { useMap } from "react-leaflet";
 
 // 添加坐标跳转按钮
 interface Poinsition {
-  lat: number;
-  lng: number;
+    lat: number;
+    lng: number;
 }
 export default () => {
-  const [open, setOpen] = useState(false);
-  const [form] = Form.useForm();
-  const map = useMap();
+    const [open, setOpen] = useState(false);
+    const [form] = Form.useForm();
+    const map = useMap();
 
-  useEffect(() => {
-    const toolbar = document.getElementById("toolbar");
-    const tool = document.createElement("div");
-    tool.title = "坐标定位";
-    tool.style.cssText = `width:30px;height:30px;background-color:#fff;display:flex;justify-content:center;align-items:center;z-index:999;;border-bottom:1px solid #ccc;`;
-    tool.innerHTML = `<svg
+    useEffect(() => {
+        const toolbar = document.getElementById("toolbar");
+        const tool = document.createElement("div");
+        tool.title = "坐标定位";
+        tool.style.cssText = `width:30px;height:30px;background-color:#fff;display:flex;justify-content:center;align-items:center;z-index:999;;border-bottom:1px solid #ccc;`;
+        tool.innerHTML = `<svg
       style="
         width: 50%;
         height: 50%;
@@ -41,53 +41,52 @@ export default () => {
       fill="#18075"
     />
     </svg>`;
-    toolbar?.appendChild(tool);
-    tool.onclick = () => {
-      setOpen(true);
+        toolbar?.appendChild(tool);
+        tool.onclick = () => {
+            setOpen(true);
+        };
+    }, []);
+
+    const handleOk = () => {
+        setOpen(false);
+        form.validateFields()
+            .then((values) => {
+                handleFlyto(values);
+            })
+            .catch((errorInfo) => {
+                console.log("Validate Failed:", errorInfo);
+            });
     };
-  }, []);
+    const handleCancel = () => {
+        setOpen(false);
+    };
 
-  const handleOk = () => {
-    setOpen(false);
-    form
-      .validateFields()
-      .then((values) => {
-        handleFlyto(values);
-      })
-      .catch((errorInfo) => {
-        console.log("Validate Failed:", errorInfo);
-      });
-  };
-  const handleCancel = () => {
-    setOpen(false);
-  };
-
-  const handleFlyto = (values: Poinsition) => {
-    map.setView([values.lat, values.lng], 10);
-    setOpen(false);
-  };
-  return (
-    <Modal
-      width={300}
-      title="坐标定位"
-      open={open}
-      onOk={handleOk}
-      onCancel={handleCancel}
-    >
-      <Form
-        form={form}
-        preserve={false}
-        labelCol={{ span: 6 }}
-        wrapperCol={{ span: 18 }}
-        onFinish={handleFlyto}
-      >
-        <Form.Item label="经度" name="lng" rules={[{ required: true }]}>
-          <InputNumber style={{ width: "100%" }} />
-        </Form.Item>
-        <Form.Item label="纬度" name="lat" rules={[{ required: true }]}>
-          <InputNumber style={{ width: "100%" }} />
-        </Form.Item>
-      </Form>
-    </Modal>
-  );
+    const handleFlyto = (values: Poinsition) => {
+        map.setView([values.lat, values.lng], 10);
+        setOpen(false);
+    };
+    return (
+        <Modal
+            width={300}
+            title="坐标定位"
+            open={open}
+            onOk={handleOk}
+            onCancel={handleCancel}
+        >
+            <Form
+                form={form}
+                preserve={false}
+                labelCol={{ span: 6 }}
+                wrapperCol={{ span: 18 }}
+                onFinish={handleFlyto}
+            >
+                <Form.Item label="经度" name="lng" rules={[{ required: true }]}>
+                    <InputNumber style={{ width: "100%" }} />
+                </Form.Item>
+                <Form.Item label="纬度" name="lat" rules={[{ required: true }]}>
+                    <InputNumber style={{ width: "100%" }} />
+                </Form.Item>
+            </Form>
+        </Modal>
+    );
 };

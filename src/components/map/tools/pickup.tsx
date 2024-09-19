@@ -4,23 +4,23 @@ import { useCallback, useEffect, useState } from "react";
 import { useMap } from "react-leaflet";
 
 export default () => {
-  const [messageApi, contextHolder] = message.useMessage();
-  const map = useMap();
-  const mapContainer = map.getContainer();
-  const [lat, setLat] = useState<number>(0);
-  const [lng, setLng] = useState<number>(0);
+    const [messageApi, contextHolder] = message.useMessage();
+    const map = useMap();
+    const mapContainer = map.getContainer();
+    const [lat, setLat] = useState<number>(0);
+    const [lng, setLng] = useState<number>(0);
 
-  useEffect(() => {
-    const toolbar = document.getElementById("toolbar");
-    const tool = document.createElement("div");
-    tool.title = "坐标拾取";
-    tool.onclick = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      onMyButtonCoordinate();
-    };
-    tool.style.cssText = `width:30px;height:30px;background-color:#fff;display:flex;justify-content:center;align-items:center;z-index:999;border-bottom:1px solid #ccc;`;
-    tool.innerHTML = `<svg
+    useEffect(() => {
+        const toolbar = document.getElementById("toolbar");
+        const tool = document.createElement("div");
+        tool.title = "坐标拾取";
+        tool.onclick = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onMyButtonCoordinate();
+        };
+        tool.style.cssText = `width:30px;height:30px;background-color:#fff;display:flex;justify-content:center;align-items:center;z-index:999;border-bottom:1px solid #ccc;`;
+        tool.innerHTML = `<svg
       style="
         width: 50%;
         height: 50%;
@@ -36,34 +36,34 @@ export default () => {
         fill="#15165"
       />
     </svg>`;
-    toolbar?.appendChild(tool);
-  }, []);
+        toolbar?.appendChild(tool);
+    }, []);
 
-  const leftClickHandler = useCallback((evt: L.LeafletMouseEvent) => {
-    L.marker(evt.latlng);
-    setLat(evt.latlng.lat);
-    setLng(evt.latlng.lng);
-    map.off("click", leftClickHandler);
-    mapContainer.style.cursor = "pointer";
-  }, []);
+    const leftClickHandler = useCallback((evt: L.LeafletMouseEvent) => {
+        L.marker(evt.latlng);
+        setLat(evt.latlng.lat);
+        setLng(evt.latlng.lng);
+        map.off("click", leftClickHandler);
+        mapContainer.style.cursor = "pointer";
+    }, []);
 
-  const onMyButtonCoordinate = useCallback(() => {
-    map.on("click", leftClickHandler);
-    mapContainer.style.cursor = "crosshair";
-  }, [leftClickHandler]);
+    const onMyButtonCoordinate = useCallback(() => {
+        map.on("click", leftClickHandler);
+        mapContainer.style.cursor = "crosshair";
+    }, [leftClickHandler]);
 
-  const success = useCallback(() => {
-    messageApi.open({
-      type: "success",
-      content: `经度${lng},纬度${lat}`,
-    });
-  }, [lat, lng, messageApi]);
+    const success = useCallback(() => {
+        messageApi.open({
+            type: "success",
+            content: `经度${lng},纬度${lat}`,
+        });
+    }, [lat, lng, messageApi]);
 
-  useEffect(() => {
-    if (lat !== 0 && lng !== 0) {
-      success();
-    }
-  }, [lat, lng, success]);
+    useEffect(() => {
+        if (lat !== 0 && lng !== 0) {
+            success();
+        }
+    }, [lat, lng, success]);
 
-  return <div>{contextHolder}</div>;
+    return <div>{contextHolder}</div>;
 };

@@ -1,16 +1,16 @@
 import {
-  Button,
-  Checkbox,
-  Collapse,
-  DatePicker,
-  Form,
-  Input,
-  InputNumber,
-  Progress,
-  Select,
-  Tooltip,
-  Upload,
-  type UploadProps,
+    Button,
+    Checkbox,
+    Collapse,
+    DatePicker,
+    Form,
+    Input,
+    InputNumber,
+    Progress,
+    Select,
+    Tooltip,
+    Upload,
+    type UploadProps,
 } from "antd";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAppSelector } from "@/store/hook";
@@ -22,370 +22,479 @@ import { getPath } from "@/request/operators";
 import { BASE_PATH } from "@/utils/globalVariable";
 
 interface FSDBProps {
-  onFinish: (values: Record<string, any>) => void;
-  setOpen: (open: boolean) => void;
+    onFinish: (values: Record<string, any>) => void;
+    setOpen: (open: boolean) => void;
 }
 
 interface FormProp {}
 
 const FSDB: React.FC<FSDBProps> = ({ onFinish, setOpen }) => {
-  const layers = useAppSelector((state) => state.box.resourceLayers);
-  const tokenHead = localStorage.getItem("education-tokenHead");
-  const token = localStorage.getItem("education-token");
-  const uid = localStorage.getItem("education-uid");
-  const [status, setStatus] = useState<ProgressStatuses[number]>("active");
-  const [progress, setProgress] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [form] = Form.useForm<FormProp>();
+    const layers = useAppSelector((state) => state.box.resourceLayers);
+    const tokenHead = localStorage.getItem("education-tokenHead");
+    const token = localStorage.getItem("education-token");
+    const uid = localStorage.getItem("education-uid");
+    const [status, setStatus] = useState<ProgressStatuses[number]>("active");
+    const [progress, setProgress] = useState(0);
+    const [loading, setLoading] = useState(false);
+    const [form] = Form.useForm<FormProp>();
 
-  const options = useMemo(() => {
-    return layers.map((layer) => ({
-      label: layer.name,
-      value: layer.filePath,
-    }));
-  }, [layers]);
+    const options = useMemo(() => {
+        return layers.map((layer) => ({
+            label: layer.name,
+            value: layer.filePath,
+        }));
+    }, [layers]);
 
-  const onProgressChange = useCallback(
-    (value: number) => {
-      setProgress(value);
-      status !== "active" && setStatus("active");
-      if (value === 100) {
+    const onProgressChange = useCallback(
+        (value: number) => {
+            setProgress(value);
+            status !== "active" && setStatus("active");
+            if (value === 100) {
+                setLoading(false);
+                setStatus("success");
+            }
+        },
+        [status]
+    );
+
+    const onExecuteFailed = useCallback(() => {
         setLoading(false);
-        setStatus("success");
-      }
-    },
-    [status]
-  );
+        setProgress(100);
+        setStatus("exception");
+    }, []);
 
-  const onExecuteFailed = useCallback(() => {
-    setLoading(false);
-    setProgress(100);
-    setStatus("exception");
-  }, []);
+    const handleCancel = useCallback(() => {
+        setOpen(false);
+        eventEmitter.emit("compute:pause", "辐射定标");
+    }, []);
 
-  const handleCancel = useCallback(() => {
-    setOpen(false);
-    eventEmitter.emit("compute:pause", "辐射定标");
-  }, []);
+    useEffect(() => {
+        eventEmitter.on("compute:progress", onProgressChange);
+        eventEmitter.on("compute:failed", onExecuteFailed);
+        eventEmitter.on("compute:done", onSuccess);
+        return () => {
+            eventEmitter.off("compute:progress", onProgressChange);
+            eventEmitter.off("compute:failed", onExecuteFailed);
+            eventEmitter.off("compute:done", onSuccess);
+        };
+    }, []);
 
-  useEffect(() => {
-    eventEmitter.on("compute:progress", onProgressChange);
-    eventEmitter.on("compute:failed", onExecuteFailed);
-    eventEmitter.on("compute:done", onSuccess);
-    return () => {
-      eventEmitter.off("compute:progress", onProgressChange);
-      eventEmitter.off("compute:failed", onExecuteFailed);
-      eventEmitter.off("compute:done", onSuccess);
+    const onAcquiGainbias = useCallback(({ file }: { file: UploadFile }) => {
+        if (file.status === "done") {
+            form.setFieldValue("ACQUI_GAINBIAS", file.response);
+        }
+    }, []);
+
+    const onAcquiSolarilluminations = useCallback(
+        ({ file }: { file: UploadFile }) => {
+            if (file.status === "done") {
+                form.setFieldValue("ACQUI_SOLARILLUMINATIONS", file.response);
+            }
+        },
+        []
+    );
+
+    const onAtmoAeronet = useCallback(({ file }: { file: UploadFile }) => {
+        form.setFieldValue("atmoAeronet", ``);
+    }, []);
+
+    const onAtmoRsr = useCallback(({ file }: { file: UploadFile }) => {
+        form.setFieldValue("atmoRsr", ``);
+    }, []);
+
+    const uploadProps: UploadProps = {
+        action: `${BASE_PATH}/api/datasource/api/dataupload/uploadteacher`,
+        name: "file",
+        accept: ".txt",
+        headers: {
+            Authorization: `${tokenHead}${token}`,
+        },
+        data: (file) => {
+            return {
+                uid: uid,
+                coursename: "operator_temp",
+            };
+        },
+        maxCount: 1,
     };
-  }, []);
 
-  const onAcquiGainbias = useCallback(({ file }: { file: UploadFile }) => {
-    if (file.status === "done") {
-      form.setFieldValue("ACQUI_GAINBIAS", file.response);
-    }
-  }, []);
-
-  const onAcquiSolarilluminations = useCallback(
-    ({ file }: { file: UploadFile }) => {
-      if (file.status === "done") {
-        form.setFieldValue("ACQUI_SOLARILLUMINATIONS", file.response);
-      }
-    },
-    []
-  );
-
-  const onAtmoAeronet = useCallback(({ file }: { file: UploadFile }) => {
-    form.setFieldValue("atmoAeronet", ``);
-  }, []);
-
-  const onAtmoRsr = useCallback(({ file }: { file: UploadFile }) => {
-    form.setFieldValue("atmoRsr", ``);
-  }, []);
-
-  const uploadProps: UploadProps = {
-    action: `${BASE_PATH}/api/datasource/api/dataupload/uploadteacher`,
-    name: "file",
-    accept: ".txt",
-    headers: {
-      Authorization: `${tokenHead}${token}`,
-    },
-    data: (file) => {
-      return {
-        uid: uid,
-        coursename: "operator_temp",
-      };
-    },
-    maxCount: 1,
-  };
-
-  const handleFinish = async (values: Record<string, any>) => {
-    setStatus("active");
-    setLoading(true);
-    const IN = (
-      await getPath({
-        paths: values.IN,
-      })
-    )?.res?.toString();
-    const ACQUI_GAINBIAS = (
-      await getPath({
-        paths: values.ACQUI_GAINBIAS,
-      })
-    )?.res?.toString();
-    const ACQUI_SOLARILLUMINATIONS = (
-      await getPath({
-        paths: values.ACQUI_SOLARILLUMINATIONS,
-      })
-    )?.res?.toString();
-    const params = {
-      identifier: "OpticalCalibration",
-      mode: "sync",
-      inputs: {
-        IN,
-        ACQUI_GAINBIAS,
-        ACQUI_SOLARILLUMINATIONS,
-        LEVEL: values.LEVEL,
-      },
-    };
-    onFinish?.(params);
-  };
-
-  const onSuccess = useCallback(() => {
-    setLoading(false);
-    setProgress(100);
-    setStatus("success");
-  }, []);
-
-  return (
-    <>
-      <Progress
-        status={status}
-        style={{ position: "absolute", top: 50, left: 0 }}
-        percent={progress}
-        format={() => ""}
-      />
-      <Form
-        labelCol={{ span: 6 }}
-        wrapperCol={{ span: 18 }}
-        initialValues={{ milli: false }}
-        onFinish={handleFinish}
-        form={form}
-        autoComplete="off"
-      >
-        <Form.Item label="选择影像" name="IN" rules={[{ required: true }]}>
-          <Select
-            showSearch
-            placeholder="选择影像"
-            options={options}
-            style={{ width: 290 }}
-          />
-        </Form.Item>
-        <Form.Item
-          label="校准级别"
-          name="LEVEL"
-          initialValue="toa"
-          rules={[{ required: true }]}
-        >
-          <Select
-            showSearch
-            placeholder="请选择"
-            options={[
-              { label: "toa", value: "toa" },
-              { label: "toatoim", value: "toatoim" },
-            ]}
-            style={{ width: 290 }}
-          />
-        </Form.Item>
-        <Form.Item
-          label="增益和偏差"
-          name="ACQUI_GAINBIAS"
-          rules={[{ required: true, message: "请选择增益和偏差" }]}
-        >
-          <Upload {...uploadProps} onChange={onAcquiGainbias}>
-            <Button icon={<UploadOutlined />}>选择文件</Button>
-          </Upload>
-        </Form.Item>
-        <Form.Item
-          label="太阳辐照"
-          name="ACQUI_SOLARILLUMINATIONS"
-          rules={[{ required: true, message: "请选择太阳辐照" }]}
-        >
-          <Upload {...uploadProps} onChange={onAcquiSolarilluminations}>
-            <Button icon={<UploadOutlined />}>选择文件</Button>
-          </Upload>
-        </Form.Item>
-        <Collapse
-          ghost
-          items={[
-            {
-              label: "高级参数",
-              children: (
-                <div>
-                  <Form.Item
-                    label="转换为毫反射率"
-                    name="milli"
-                    valuePropName="checked"
-                  >
-                    <Checkbox />
-                  </Form.Item>
-                  <Form.Item
-                    label={
-                      <Tooltip title="将反射率值限制在 [0, 1] 之间">
-                        将反射率值限制在 [0, 1] 之间
-                      </Tooltip>
-                    }
-                    name="clamp"
-                    valuePropName="checked"
-                  >
-                    <Checkbox />
-                  </Form.Item>
-                  <Form.Item label="分钟" name="acquiMinute" initialValue={0}>
-                    <InputNumber placeholder="请输入" style={{ width: 290 }} />
-                  </Form.Item>
-                  <Form.Item label="小时" name="acquiHour" initialValue={12}>
-                    <InputNumber placeholder="请输入" style={{ width: 290 }} />
-                  </Form.Item>
-                  <Form.Item label="日" name="acquiDay" initialValue={1}>
-                    <InputNumber placeholder="请输入" style={{ width: 290 }} />
-                  </Form.Item>
-                  <Form.Item label="月" name="acquiDay" initialValue={1}>
-                    <InputNumber placeholder="请输入" style={{ width: 290 }} />
-                  </Form.Item>
-                  <Form.Item label="年" name="acquiYear" initialValue={2000}>
-                    <InputNumber placeholder="请输入" style={{ width: 290 }} />
-                  </Form.Item>
-                  <Form.Item
-                    label="通量归一化"
-                    name="acquiFluxnormcoeff"
-                    initialValue={0}
-                  >
-                    <InputNumber placeholder="请输入" style={{ width: 290 }} />
-                  </Form.Item>
-
-                  <Form.Item
-                    label="太阳距离"
-                    name="acquiSolardistance"
-                    initialValue={0}
-                  >
-                    <InputNumber placeholder="请输入" style={{ width: 290 }} />
-                  </Form.Item>
-
-                  <Form.Item
-                    label="太阳仰角(度)"
-                    name="acquiSunElev"
-                    initialValue={90}
-                  >
-                    <InputNumber placeholder="请输入" style={{ width: 290 }} />
-                  </Form.Item>
-
-                  <Form.Item
-                    label="太阳方位角(度)"
-                    name="acquiSunAzim"
-                    initialValue={0}
-                  >
-                    <InputNumber placeholder="请输入" style={{ width: 290 }} />
-                  </Form.Item>
-
-                  <Form.Item
-                    label="观测仰角(度)"
-                    name="acquiViewElev"
-                    initialValue={90}
-                  >
-                    <InputNumber placeholder="请输入" style={{ width: 290 }} />
-                  </Form.Item>
-
-                  <Form.Item
-                    label="观测方位角(度)"
-                    name="acquiViewAzim"
-                    initialValue={0}
-                  >
-                    <InputNumber placeholder="请输入" style={{ width: 290 }} />
-                  </Form.Item>
-                  <Form.Item
-                    label="气溶胶模型"
-                    initialValue="continental"
-                    name="atmoAerosol"
-                  >
-                    <Select
-                      showSearch
-                      placeholder="请选择"
-                      options={[
-                        { label: "noaersol", value: "noaersol" },
-                        { label: "continental", value: "continental" },
-                        { label: "martitime", value: "martitime" },
-                        { label: "urban", value: "urban" },
-                        { label: "desertic", value: "desertic" },
-                      ]}
-                      style={{ width: 290 }}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label="臭氧量(cm-atm)"
-                    name="atmoOz"
-                    initialValue={0}
-                  >
-                    <InputNumber placeholder="请输入" style={{ width: 290 }} />
-                  </Form.Item>
-                  <Form.Item
-                    label="水汽量(g/cm²)"
-                    name="atmoWa"
-                    initialValue={2.5}
-                  >
-                    <InputNumber placeholder="请输入" style={{ width: 290 }} />
-                  </Form.Item>
-                  <Form.Item
-                    label="大气压(hPa)"
-                    name="atmoPressure"
-                    initialValue={1030}
-                  >
-                    <InputNumber placeholder="请输入" style={{ width: 290 }} />
-                  </Form.Item>
-                  <Form.Item
-                    label="气溶胶光学厚度"
-                    name="atmoOpt"
-                    initialValue={0.2}
-                  >
-                    <InputNumber placeholder="请输入" style={{ width: 290 }} />
-                  </Form.Item>
-
-                  <Form.Item label="Aeronet 文件" name="atmoAeronet">
-                    <Upload {...uploadProps} onChange={onAtmoAeronet}>
-                      <Button icon={<UploadOutlined />}>选择文件</Button>
-                    </Upload>
-                  </Form.Item>
-
-                  <Form.Item label="相对光谱响应文件" name="atmoRsr">
-                    <Upload {...uploadProps} onChange={onAtmoRsr}>
-                      <Button icon={<UploadOutlined />}>选择文件</Button>
-                    </Upload>
-                  </Form.Item>
-                  <Form.Item
-                    label="窗口半径(邻近效应)"
-                    name="atmoRadius"
-                    initialValue={2}
-                  >
-                    <Input placeholder="请输入" style={{ width: 290 }} />
-                  </Form.Item>
-                  <Form.Item
-                    label="像素大小(公里)"
-                    name="atmoPixsize"
-                    initialValue={1}
-                  >
-                    <InputNumber placeholder="请输入" style={{ width: 290 }} />
-                  </Form.Item>
-                </div>
-              ),
+    const handleFinish = async (values: Record<string, any>) => {
+        setStatus("active");
+        setLoading(true);
+        const IN = (
+            await getPath({
+                paths: values.IN,
+            })
+        )?.res?.toString();
+        const ACQUI_GAINBIAS = (
+            await getPath({
+                paths: values.ACQUI_GAINBIAS,
+            })
+        )?.res?.toString();
+        const ACQUI_SOLARILLUMINATIONS = (
+            await getPath({
+                paths: values.ACQUI_SOLARILLUMINATIONS,
+            })
+        )?.res?.toString();
+        const params = {
+            identifier: "OpticalCalibration",
+            mode: "sync",
+            inputs: {
+                IN,
+                ACQUI_GAINBIAS,
+                ACQUI_SOLARILLUMINATIONS,
+                LEVEL: values.LEVEL,
             },
-          ]}
-        />
-        <div className={styles.formBtn}>
-          <Button type="primary" htmlType="submit" loading={loading}>
-            确认
-          </Button>
-          <Button onClick={handleCancel}>取消</Button>
-        </div>
-      </Form>
-    </>
-  );
+        };
+        onFinish?.(params);
+    };
+
+    const onSuccess = useCallback(() => {
+        setLoading(false);
+        setProgress(100);
+        setStatus("success");
+    }, []);
+
+    return (
+        <>
+            <Progress
+                status={status}
+                style={{ position: "absolute", top: 50, left: 0 }}
+                percent={progress}
+                format={() => ""}
+            />
+            <Form
+                labelCol={{ span: 6 }}
+                wrapperCol={{ span: 18 }}
+                initialValues={{ milli: false }}
+                onFinish={handleFinish}
+                form={form}
+                autoComplete="off"
+            >
+                <Form.Item
+                    label="选择影像"
+                    name="IN"
+                    rules={[{ required: true }]}
+                >
+                    <Select
+                        showSearch
+                        placeholder="选择影像"
+                        options={options}
+                        style={{ width: 290 }}
+                    />
+                </Form.Item>
+                <Form.Item
+                    label="校准级别"
+                    name="LEVEL"
+                    initialValue="toa"
+                    rules={[{ required: true }]}
+                >
+                    <Select
+                        showSearch
+                        placeholder="请选择"
+                        options={[
+                            { label: "toa", value: "toa" },
+                            { label: "toatoim", value: "toatoim" },
+                        ]}
+                        style={{ width: 290 }}
+                    />
+                </Form.Item>
+                <Form.Item
+                    label="增益和偏差"
+                    name="ACQUI_GAINBIAS"
+                    rules={[{ required: true, message: "请选择增益和偏差" }]}
+                >
+                    <Upload {...uploadProps} onChange={onAcquiGainbias}>
+                        <Button icon={<UploadOutlined />}>选择文件</Button>
+                    </Upload>
+                </Form.Item>
+                <Form.Item
+                    label="太阳辐照"
+                    name="ACQUI_SOLARILLUMINATIONS"
+                    rules={[{ required: true, message: "请选择太阳辐照" }]}
+                >
+                    <Upload
+                        {...uploadProps}
+                        onChange={onAcquiSolarilluminations}
+                    >
+                        <Button icon={<UploadOutlined />}>选择文件</Button>
+                    </Upload>
+                </Form.Item>
+                <Collapse
+                    ghost
+                    items={[
+                        {
+                            label: "高级参数",
+                            children: (
+                                <div>
+                                    <Form.Item
+                                        label="转换为毫反射率"
+                                        name="milli"
+                                        valuePropName="checked"
+                                    >
+                                        <Checkbox />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label={
+                                            <Tooltip title="将反射率值限制在 [0, 1] 之间">
+                                                将反射率值限制在 [0, 1] 之间
+                                            </Tooltip>
+                                        }
+                                        name="clamp"
+                                        valuePropName="checked"
+                                    >
+                                        <Checkbox />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="分钟"
+                                        name="acquiMinute"
+                                        initialValue={0}
+                                    >
+                                        <InputNumber
+                                            placeholder="请输入"
+                                            style={{ width: 290 }}
+                                        />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="小时"
+                                        name="acquiHour"
+                                        initialValue={12}
+                                    >
+                                        <InputNumber
+                                            placeholder="请输入"
+                                            style={{ width: 290 }}
+                                        />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="日"
+                                        name="acquiDay"
+                                        initialValue={1}
+                                    >
+                                        <InputNumber
+                                            placeholder="请输入"
+                                            style={{ width: 290 }}
+                                        />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="月"
+                                        name="acquiDay"
+                                        initialValue={1}
+                                    >
+                                        <InputNumber
+                                            placeholder="请输入"
+                                            style={{ width: 290 }}
+                                        />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="年"
+                                        name="acquiYear"
+                                        initialValue={2000}
+                                    >
+                                        <InputNumber
+                                            placeholder="请输入"
+                                            style={{ width: 290 }}
+                                        />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="通量归一化"
+                                        name="acquiFluxnormcoeff"
+                                        initialValue={0}
+                                    >
+                                        <InputNumber
+                                            placeholder="请输入"
+                                            style={{ width: 290 }}
+                                        />
+                                    </Form.Item>
+
+                                    <Form.Item
+                                        label="太阳距离"
+                                        name="acquiSolardistance"
+                                        initialValue={0}
+                                    >
+                                        <InputNumber
+                                            placeholder="请输入"
+                                            style={{ width: 290 }}
+                                        />
+                                    </Form.Item>
+
+                                    <Form.Item
+                                        label="太阳仰角(度)"
+                                        name="acquiSunElev"
+                                        initialValue={90}
+                                    >
+                                        <InputNumber
+                                            placeholder="请输入"
+                                            style={{ width: 290 }}
+                                        />
+                                    </Form.Item>
+
+                                    <Form.Item
+                                        label="太阳方位角(度)"
+                                        name="acquiSunAzim"
+                                        initialValue={0}
+                                    >
+                                        <InputNumber
+                                            placeholder="请输入"
+                                            style={{ width: 290 }}
+                                        />
+                                    </Form.Item>
+
+                                    <Form.Item
+                                        label="观测仰角(度)"
+                                        name="acquiViewElev"
+                                        initialValue={90}
+                                    >
+                                        <InputNumber
+                                            placeholder="请输入"
+                                            style={{ width: 290 }}
+                                        />
+                                    </Form.Item>
+
+                                    <Form.Item
+                                        label="观测方位角(度)"
+                                        name="acquiViewAzim"
+                                        initialValue={0}
+                                    >
+                                        <InputNumber
+                                            placeholder="请输入"
+                                            style={{ width: 290 }}
+                                        />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="气溶胶模型"
+                                        initialValue="continental"
+                                        name="atmoAerosol"
+                                    >
+                                        <Select
+                                            showSearch
+                                            placeholder="请选择"
+                                            options={[
+                                                {
+                                                    label: "noaersol",
+                                                    value: "noaersol",
+                                                },
+                                                {
+                                                    label: "continental",
+                                                    value: "continental",
+                                                },
+                                                {
+                                                    label: "martitime",
+                                                    value: "martitime",
+                                                },
+                                                {
+                                                    label: "urban",
+                                                    value: "urban",
+                                                },
+                                                {
+                                                    label: "desertic",
+                                                    value: "desertic",
+                                                },
+                                            ]}
+                                            style={{ width: 290 }}
+                                        />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="臭氧量(cm-atm)"
+                                        name="atmoOz"
+                                        initialValue={0}
+                                    >
+                                        <InputNumber
+                                            placeholder="请输入"
+                                            style={{ width: 290 }}
+                                        />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="水汽量(g/cm²)"
+                                        name="atmoWa"
+                                        initialValue={2.5}
+                                    >
+                                        <InputNumber
+                                            placeholder="请输入"
+                                            style={{ width: 290 }}
+                                        />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="大气压(hPa)"
+                                        name="atmoPressure"
+                                        initialValue={1030}
+                                    >
+                                        <InputNumber
+                                            placeholder="请输入"
+                                            style={{ width: 290 }}
+                                        />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="气溶胶光学厚度"
+                                        name="atmoOpt"
+                                        initialValue={0.2}
+                                    >
+                                        <InputNumber
+                                            placeholder="请输入"
+                                            style={{ width: 290 }}
+                                        />
+                                    </Form.Item>
+
+                                    <Form.Item
+                                        label="Aeronet 文件"
+                                        name="atmoAeronet"
+                                    >
+                                        <Upload
+                                            {...uploadProps}
+                                            onChange={onAtmoAeronet}
+                                        >
+                                            <Button icon={<UploadOutlined />}>
+                                                选择文件
+                                            </Button>
+                                        </Upload>
+                                    </Form.Item>
+
+                                    <Form.Item
+                                        label="相对光谱响应文件"
+                                        name="atmoRsr"
+                                    >
+                                        <Upload
+                                            {...uploadProps}
+                                            onChange={onAtmoRsr}
+                                        >
+                                            <Button icon={<UploadOutlined />}>
+                                                选择文件
+                                            </Button>
+                                        </Upload>
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="窗口半径(邻近效应)"
+                                        name="atmoRadius"
+                                        initialValue={2}
+                                    >
+                                        <Input
+                                            placeholder="请输入"
+                                            style={{ width: 290 }}
+                                        />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="像素大小(公里)"
+                                        name="atmoPixsize"
+                                        initialValue={1}
+                                    >
+                                        <InputNumber
+                                            placeholder="请输入"
+                                            style={{ width: 290 }}
+                                        />
+                                    </Form.Item>
+                                </div>
+                            ),
+                        },
+                    ]}
+                />
+                <div className={styles.formBtn}>
+                    <Button type="primary" htmlType="submit" loading={loading}>
+                        确认
+                    </Button>
+                    <Button onClick={handleCancel}>取消</Button>
+                </div>
+            </Form>
+        </>
+    );
 };
 
 export default FSDB;

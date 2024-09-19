@@ -1,12 +1,13 @@
 @import "@/styles/variables";
 
 .arrow {
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  background: url("#{$base-path}/img/box/right-arrow.webp") no-repeat 100% 100%;
-  cursor: pointer;
-  z-index: 999;
-  margin-left: -34px;
-  margin-top: 150px;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    background: url("#{$base-path}/img/box/right-arrow.webp") no-repeat 100%
+        100%;
+    cursor: pointer;
+    z-index: 999;
+    margin-left: -34px;
+    margin-top: 150px;
 }
