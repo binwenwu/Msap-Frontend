@@ -19,8 +19,8 @@ import styles from "@/styles/index.module.scss";
 export default function Home() {
     const router = useRouter();
     const [loading, setLoading] = useState(false); // 控制加载动画的显示
-    const [username, setUsername] = useState(""); // 存储用户输入的用户名
-    const [password, setPassword] = useState(""); // 存储用户输入的密码
+    const [username, setUsername] = useState("17371533778"); // 存储用户输入的用户名
+    const [password, setPassword] = useState("123456"); // 存储用户输入的密码
     const [tip, setTip] = useState(""); // 显示错误提示信息
     const dispatch = useAppDispatch(); // 用于分发Redux操作
 
